@@ -3,8 +3,11 @@
 
 OSCManager::OSCManager()
 {
-  outIP_ = new IPAddress(192,168,1,51);        // remote IP of your computer
+  outIP_ = new IPAddress(192,168,1,27);        // remote IP of your computer
+  //outIP_ = new IPAddress(192,168,1,51);        // remote IP of your computer
+  //outPort_ = 8000;          // remote port to receive OSC
   outPort_ = 8000;          // remote port to receive OSC
+  
   localPort_ = 8888;        // local port to listen for OSC packets (actually not used for sending)
 }
 //todo : destructor
@@ -26,6 +29,25 @@ void OSCManager::setup()
       OSCmsg.empty(); 
   }
   
+  void OSCManager::sendOSCMessage(String msg, int parameter1, int parameter2){
+      OSCMessage OSCmsg(msg.c_str());
+      OSCmsg.add(parameter1);
+      OSCmsg.add(parameter2);
+      Udp.beginPacket(*outIP_, outPort_);
+      OSCmsg.send(Udp);
+      Udp.endPacket();
+      OSCmsg.empty(); 
+  }
+  void OSCManager::sendOSCMessage(String msg, int parameter1, int parameter2, int parameter3){
+      OSCMessage OSCmsg(msg.c_str());
+      OSCmsg.add(parameter1);
+      OSCmsg.add(parameter2);
+	  OSCmsg.add(parameter3);
+      Udp.beginPacket(*outIP_, outPort_);
+      OSCmsg.send(Udp);
+      Udp.endPacket();
+      OSCmsg.empty(); 
+  }  
   void OSCManager::sendNote(unsigned int note, unsigned int velocity, int duration)
   {
       String prefix  =  "/vkb_midi/0/note/";
