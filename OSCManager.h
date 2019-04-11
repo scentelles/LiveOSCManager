@@ -12,6 +12,7 @@ class OSCManager
   
   public:
     OSCManager();
+	OSCManager(IPAddress * myAddress, int outPort, int localPort);
     void setup();
     void sendOSCMessage(String msg, int parameter);
 	void sendOSCMessage(String msg, int parameter1, int parameter2);

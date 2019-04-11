@@ -3,13 +3,24 @@
 
 OSCManager::OSCManager()
 {
-  outIP_ = new IPAddress(192,168,1,27);        // remote IP of your computer
-  //outIP_ = new IPAddress(192,168,1,51);        // remote IP of your computer
-  //outPort_ = 8000;          // remote port to receive OSC
+  //outIP_ = new IPAddress(10,3,141,1);        // remote IP of your computer
+  outIP_ = new IPAddress(192,168,1,51);        // remote IP of your computer
+
   outPort_ = 8000;          // remote port to receive OSC
   
   localPort_ = 8888;        // local port to listen for OSC packets (actually not used for sending)
 }
+
+OSCManager::OSCManager(IPAddress * myAddress, int outPort, int localPort)
+{
+  outIP_ = myAddress;        // remote IP of your computer
+  //outIP_ = new IPAddress(192,168,1,51);        // remote IP of your computer
+  //outPort_ = 8000;          // remote port to receive OSC
+  outPort_ = outPort;          // remote port to receive OSC
+  
+  localPort_ = localPort;        // local port to listen for OSC packets (actually not used for sending)
+}
+
 //todo : destructor
 
 void OSCManager::setup()
@@ -53,7 +64,7 @@ void OSCManager::setup()
       String prefix  =  "/vkb_midi/0/note/";
     String noteMsg = prefix + String(note);
     sendOSCMessage(noteMsg, velocity);
-    if(duration >= 0)
+    if(duration > 0)
     {
         delay(duration);
         sendOSCMessage(noteMsg, 0);
